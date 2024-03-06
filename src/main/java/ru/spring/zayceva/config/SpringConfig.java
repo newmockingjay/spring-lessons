@@ -27,6 +27,7 @@ import java.util.Objects;
 @PropertySource("classpath:database.properties")
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
+
     private final Environment environment;
 
     @Autowired
@@ -76,10 +77,10 @@ public class SpringConfig implements WebMvcConfigurer {
 //        dataSource.setUsername("postgres");
 //        dataSource.setPassword("158821Xy");
 
-        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
-        dataSource.setUrl(environment.getProperty("url"));
-        dataSource.setUsername(environment.getProperty("username"));
-        dataSource.setPassword(environment.getProperty("password"));
+        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("spring.datasource.driver")));
+        dataSource.setUrl(environment.getProperty("spring.datasource.url"));
+        dataSource.setUsername(environment.getProperty("spring.datasource.username"));
+        dataSource.setPassword(environment.getProperty("spring.datasource.password"));
 
         return dataSource;
     }
