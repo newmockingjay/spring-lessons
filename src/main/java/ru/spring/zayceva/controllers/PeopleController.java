@@ -9,16 +9,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.spring.zayceva.dao.PersonDAO;
 import ru.spring.zayceva.models.Person;
+import ru.spring.zayceva.util.PersonValidator;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
         this.personDAO = personDAO;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -45,8 +48,10 @@ public class PeopleController {
 
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResulte){ // создает пустого person, внедряет значения из формы и помещает в модель
-        if (bindingResulte.hasErrors()){
+                         BindingResult bindingResult){ // создает пустого person, внедряет значения из формы и помещает в модель
+        personValidator.validate(person, bindingResult);
+
+        if (bindingResult.hasErrors()){
             return "people/new";
         }
 
